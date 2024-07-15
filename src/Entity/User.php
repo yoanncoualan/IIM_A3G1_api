@@ -19,12 +19,12 @@ use App\State\UserPasswordHasherProcessor;
 
 #[ApiResource(
     operations: [
-        new GetCollection(),
-        new Get(),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')", securityMessage: 'You are not allowed to get users'),
         new Post(processor: UserPasswordHasherProcessor::class),
-        new Put(processor: UserPasswordHasherProcessor::class),
-        new Patch(processor: UserPasswordHasherProcessor::class),
-        new Delete(),
+        new Get(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to get this user'),
+        new Put(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
+        new Patch(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
+        new Delete(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to delete this user'),
     ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']]
