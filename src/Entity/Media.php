@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[Vich\Uploadable]
 #[ApiResource(
+    forceEager: true,
     normalizationContext: ['groups' => ['read']],
     types: ['https://schema.org/MediaObject'],
     operations: [
@@ -59,7 +60,6 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('read')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $filePath = null;
 
@@ -67,7 +67,7 @@ class Media
     private ?Product $product = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['read'])]
+    #[Groups('read')]
     public ?string $contentUrl = null;
  
     #[Vich\UploadableField(mapping: 'media_object', fileNameProperty: 'filePath')]
